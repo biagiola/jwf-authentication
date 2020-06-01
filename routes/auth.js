@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const User = require('../model/User');
 const { registerValidation, loginValidation } = require('../validation');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
  
 router.post('/register', async (req, res) => {
-
     // lest validate the date beore we a user
     //const validation = Joi.validate(req.body, schema);
     const { error } = registerValidation(req.body);
@@ -47,7 +47,11 @@ router.post('/login', async (req, res) => {
     const validPass = await bcrypt.compare(req.body.password, user.password);
     if(!validPass) return res.status(400).send('Email is not found');
 
-    res.send('Logged in!');
+    //Create and assign a token
+    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+    res.header('auth-token', token).send(token);
+
+    //res.send('Logged in!');
     
 });
 
