@@ -8,9 +8,11 @@ const authRoute = require('./routes/auth');
 
 dotenv.config();
 
+const uri = 'mongodb://localhost/jwt';
+
 //Connect to DB
 mongoose.connect(
-    process.env.DB_CONNECT, 
+    uri, 
     { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false },
 );
 mongoose.connection.once('open', function(){
@@ -23,4 +25,4 @@ app.use(express.json());
 //Route Middleware
 app.use('/api/user', authRoute);
 
-app.listen(3000, () => console.log('Server up and running'));
+app.listen(5000, () => console.log('Server up and running'));
